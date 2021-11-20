@@ -1,9 +1,5 @@
 import './style.css';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import Stats from 'three/examples/jsm/libs/stats.module.js';
-import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'https://cdn.skypack.dev/three@0.134.0';
 // Setup
 
 const scene = new THREE.Scene();

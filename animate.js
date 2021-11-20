@@ -1,229 +1,216 @@
+import * as THREE from "https://cdn.skypack.dev/three@0.134.0";
+
+import Stats from "https://cdn.skypack.dev/three@0.134.0/examples/jsm/libs/stats.module.js";
+import { GLTFLoader } from "https://cdn.skypack.dev/three@0.134.0/examples/jsm/loaders/GLTFLoader.js";
+
+let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
+let camera, scene, renderer, model, face;
+
+const api = { state: "Walking", emotes: "Wave" };
+
+init();
+animate();
+
+function init() {
+  container = document.createElement("div");
+  document.body.appendChild(container);
+
+  camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.25,
+    100
+  );
+  camera.position.set(-5, 3, 10);
+  camera.lookAt(new THREE.Vector3(0, 2, 0));
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xe0e0e0);
+  scene.fog = new THREE.Fog(0xe0e0e0, 20, 100);
+
+  clock = new THREE.Clock();
+
+  // lights
+
+  const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+  hemiLight.position.set(0, 20, 0);
+  scene.add(hemiLight);
 
-import * as THREE from 'three';
+  const dirLight = new THREE.DirectionalLight(0xffffff);
+  dirLight.position.set(0, 20, 10);
+  scene.add(dirLight);
 
-			import Stats from 'three/examples/jsm/libs/stats.module.js';
-			import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
+  // ground
 
-			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(2000, 2000),
+    new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
+  );
+  mesh.rotation.x = -Math.PI / 2;
+  scene.add(mesh);
 
-			let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
-			let camera, scene, renderer, model, face;
+  const grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000);
+  grid.material.opacity = 0.2;
+  grid.material.transparent = true;
+  scene.add(grid);
 
-			const api = { state: 'Walking', emotes: 'Wave' };
+  // model
 
-			init();
-			animate();
+  const loader = new GLTFLoader();
+  loader.load(
+    "./RobotExpressive.glb",
+    function (gltf) {
+      model = gltf.scene;
+      scene.add(model);
 
-			function init() {
+      createGUI(model, gltf.animations);
+    },
+    undefined,
+    function (e) {
+      console.error(e);
+    }
+  );
 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  container.appendChild(renderer.domElement);
 
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 100 );
-				camera.position.set( - 5, 3, 10 );
-				camera.lookAt( new THREE.Vector3( 0, 2, 0 ) );
+  window.addEventListener("resize", onWindowResize);
 
-				scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0xe0e0e0 );
-				scene.fog = new THREE.Fog( 0xe0e0e0, 20, 100 );
+  // stats
+  stats = new Stats();
+  container.appendChild(stats.dom);
+  var msg = new SpeechSynthesisUtterance();
+  var voices = window.speechSynthesis.getVoices();
+  console.log(voices);
+  msg.voice = voices[0];
+  msg.text = "Hey there, This is CJ.";
+  window.speechSynthesis.speak(msg);
+}
 
-				clock = new THREE.Clock();
+function createGUI(model, animations) {
+  const states = [
+    "Idle",
+    "Walking",
+    "Running",
+    "Dance",
+    "Death",
+    "Sitting",
+    "Standing",
+  ];
+  const emotes = ["Jump", "Yes", "No", "Wave", "Punch", "ThumbsUp"];
 
-				// lights
+  // gui = new GUI();
 
-				const hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-				hemiLight.position.set( 0, 20, 0 );
-				scene.add( hemiLight );
+  mixer = new THREE.AnimationMixer(model);
 
-				const dirLight = new THREE.DirectionalLight( 0xffffff );
-				dirLight.position.set( 0, 20, 10 );
-				scene.add( dirLight );
+  actions = {};
 
-				// ground
+  for (let i = 0; i < animations.length; i++) {
+    const clip = animations[i];
+    const action = mixer.clipAction(clip);
+    actions[clip.name] = action;
 
-				const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2000, 2000 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
-				mesh.rotation.x = - Math.PI / 2;
-				scene.add( mesh );
+    if (emotes.indexOf(clip.name) >= 0 || states.indexOf(clip.name) >= 4) {
+      action.clampWhenFinished = true;
+      action.loop = THREE.LoopOnce;
+    }
+  }
 
-				const grid = new THREE.GridHelper( 200, 40, 0x000000, 0x000000 );
-				grid.material.opacity = 0.2;
-				grid.material.transparent = true;
-				scene.add( grid );
+  // states
 
-				// model
+  // const statesFolder = gui.addFolder( 'States' );
 
-				const loader = new GLTFLoader();
-				loader.load( './RobotExpressive.glb', function ( gltf ) {
+  // const clipCtrl = statesFolder.add( api, 'state' ).options( states );
 
-					model = gltf.scene;
-					scene.add( model );
+  // clipCtrl.onChange( function () {
 
-					createGUI( model, gltf.animations );
+  // 	fadeToAction( api.state, 0.5 );
 
-				}, undefined, function ( e ) {
+  // } );
 
-					console.error( e );
+  // statesFolder.open();
 
-				} );
+  // emotes
 
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.outputEncoding = THREE.sRGBEncoding;
-				container.appendChild( renderer.domElement );
+  // const emoteFolder = gui.addFolder( 'Emotes' );
 
-				window.addEventListener( 'resize', onWindowResize );
+  function createEmoteCallback(name) {
+    api[name] = function () {
+      fadeToAction(name, 0.2);
 
-				// stats
-				stats = new Stats();
-				container.appendChild( stats.dom );
-                var msg = new SpeechSynthesisUtterance();
-                var voices = window.speechSynthesis.getVoices();
-                console.log(voices);
-                msg.voice = voices[0];
-                msg.text = "Hey there, This is CJ.";
-                window.speechSynthesis.speak(msg);
-                
+      mixer.addEventListener("finished", restoreState);
+    };
 
-			}
+    // 	emoteFolder.add( api, name );
+  }
 
-			function createGUI( model, animations ) {
+  function restoreState() {
+    mixer.removeEventListener("finished", restoreState);
 
-				const states = [ 'Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing' ];
-				const emotes = [ 'Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
+    fadeToAction(api.state, 0.2);
+  }
 
-				// gui = new GUI();
+  for (let i = 0; i < emotes.length; i++) {
+    createEmoteCallback(emotes[i]);
+  }
 
-			mixer = new THREE.AnimationMixer( model );
+  // emoteFolder.open();
 
-				actions = {};
-                
+  // expressions
 
-				for ( let i = 0; i < animations.length; i ++ ) {
+  // face = model.getObjectByName( 'Head_4' );
 
-					const clip = animations[ i ];
-					const action = mixer.clipAction( clip );
-					actions[ clip.name ] = action;
+  // const expressions = Object.keys( face.morphTargetDictionary );
+  // const expressionFolder = gui.addFolder( 'Expressions' );
 
-					if ( emotes.indexOf( clip.name ) >= 0 || states.indexOf( clip.name ) >= 4 ) {
+  // for ( let i = 0; i < expressions.length; i ++ ) {
 
-						action.clampWhenFinished = true;
-						action.loop = THREE.LoopOnce;
+  // 	expressionFolder.add( face.morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
 
-					}
+  // }
+  activeAction = actions["Wave"];
+  activeAction = actions["Running"];
+  activeAction.play();
 
-				}
+  //	expressionFolder.open();
+}
 
-				// states
+function fadeToAction(name, duration) {
+  previousAction = activeAction;
+  activeAction = actions[name];
 
-				// const statesFolder = gui.addFolder( 'States' );
+  if (previousAction !== activeAction) {
+    previousAction.fadeOut(duration);
+  }
 
-				// const clipCtrl = statesFolder.add( api, 'state' ).options( states );
+  activeAction
+    .reset()
+    .setEffectiveTimeScale(1)
+    .setEffectiveWeight(1)
+    .fadeIn(duration)
+    .play();
+}
 
-				// clipCtrl.onChange( function () {
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
 
-				// 	fadeToAction( api.state, 0.5 );
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
-				// } );
+//
 
-				// statesFolder.open();
+function animate() {
+  const dt = clock.getDelta();
 
-				// emotes
+  if (mixer) mixer.update(dt);
 
-				// const emoteFolder = gui.addFolder( 'Emotes' );
+  requestAnimationFrame(animate);
 
-				function createEmoteCallback( name ) {
+  renderer.render(scene, camera);
 
-					api[ name ] = function () {
-
-						fadeToAction( name, 0.2 );
-
-						mixer.addEventListener( 'finished', restoreState );
-
-					};
-
-				// 	emoteFolder.add( api, name );
-
-				 }
-
-				function restoreState() {
-
-					mixer.removeEventListener( 'finished', restoreState );
-
-					fadeToAction( api.state, 0.2 );
-
-				}
-
-				for ( let i = 0; i < emotes.length; i ++ ) {
-
-					createEmoteCallback( emotes[ i ] );
-
-				}
-
-				// emoteFolder.open();
-
-				// expressions
-
-				// face = model.getObjectByName( 'Head_4' );
-
-				// const expressions = Object.keys( face.morphTargetDictionary );
-				// const expressionFolder = gui.addFolder( 'Expressions' );
-
-				// for ( let i = 0; i < expressions.length; i ++ ) {
-
-				// 	expressionFolder.add( face.morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
-
-				// }
-                activeAction = actions[ 'Wave' ];
-				activeAction = actions[ 'Running' ];
-				activeAction.play();
-
-			//	expressionFolder.open();
-
-			}
-
-			function fadeToAction( name, duration ) {
-
-				previousAction = activeAction;
-				activeAction = actions[ name ];
-
-				if ( previousAction !== activeAction ) {
-
-					previousAction.fadeOut( duration );
-
-				}
-
-				activeAction
-					.reset()
-					.setEffectiveTimeScale( 1 )
-					.setEffectiveWeight( 1 )
-					.fadeIn( duration )
-					.play();
-
-			}
-
-			function onWindowResize() {
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-			}
-
-			//
-
-			function animate() {
-
-				const dt = clock.getDelta();
-
-				if ( mixer ) mixer.update( dt );
-
-				requestAnimationFrame( animate );
-
-				renderer.render( scene, camera );
-
-				stats.update();
-
-			}
-
+  stats.update();
+}
