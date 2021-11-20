@@ -1,10 +1,8 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.134.0";
-
-import Stats from "https://cdn.skypack.dev/three@0.134.0/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.134.0/examples/jsm/loaders/GLTFLoader.js";
 
-let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
-let camera, scene, renderer, model, face;
+let container, clock, mixer, actions, activeAction, previousAction;
+let camera, scene, renderer, model;
 
 const api = { state: "Walking", emotes: "Wave" };
 
@@ -80,14 +78,13 @@ function init() {
   window.addEventListener("resize", onWindowResize);
 
   // stats
-  stats = new Stats();
-  container.appendChild(stats.dom);
-  var msg = new SpeechSynthesisUtterance();
-  var voices = window.speechSynthesis.getVoices();
-  console.log(voices);
-  msg.voice = voices[0];
-  msg.text = "Hey there, This is CJ.";
-  window.speechSynthesis.speak(msg);
+  //stats = new Stats();
+  //container.appendChild(stats.dom);
+  // var msg = new SpeechSynthesisUtterance();
+  // var voices = window.speechSynthesis.getVoices();
+  // msg.voice = voices[0];
+  // msg.text = "Hey there, This is CJ.";
+  // window.speechSynthesis.speak(msg);
 }
 
 function createGUI(model, animations) {
@@ -172,7 +169,7 @@ function createGUI(model, animations) {
 
   // }
   activeAction = actions["Wave"];
-  activeAction = actions["Running"];
+  activeAction = actions["Walking"];
   activeAction.play();
 
   //	expressionFolder.open();
@@ -212,5 +209,5 @@ function animate() {
 
   renderer.render(scene, camera);
 
-  stats.update();
+  // stats.update();
 }

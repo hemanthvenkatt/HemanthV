@@ -5,177 +5,416 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CJ's Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
-  --dark-bg: rgba(15, 15, 15, 0.95);
-  --spacing: 350px;
+        --dark-bg: rgba(15, 15, 15, 0.95);
+        --spacing: 350px;
+        font-family: "Quicksand", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      /* The device with borders */
+      .smartphone {
+        position: relative;
+        width: 220px;
+        height: 400px;
+        margin: auto;
+        border: 16px black solid;
+        border-top-width: 60px;
+        border-bottom-width: 60px;
+        border-radius: 36px;
+      }
 
-  font-family: brandon-grotesque, sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
+      /* The horizontal line on the top of the device */
+      .smartphone:before {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 5px;
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #333;
+        border-radius: 10px;
+      }
 
+      /* The circle on the bottom of the device */
+      .smartphone:after {
+        content: "";
+        display: block;
+        width: 35px;
+        height: 35px;
+        position: absolute;
+        left: 50%;
+        bottom: -65px;
+        transform: translate(-50%, -50%);
+        background: #333;
+        border-radius: 50%;
+      }
 
-main {
-  width: 100vw;
-  color: white;
-  z-index: 99;
-  position: absolute;
-  width: 100%;
-  margin: 0px auto;
-  padding: 120px 0px;
-  
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-}
+      main {
+        width: 100vw;
+        color: white;
+        z-index: 99;
+        position: absolute;
+        width: 100%;
+        margin: 0px auto;
+        padding: 120px 0px;
 
-h1, h2, h3, blockquote {
-  font-family: elevon, sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+      }
 
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-}
+      h1,
+      h2,
+      h3,
+      blockquote {
+        font-family: elevon, sans-serif;
+        font-weight: 700;
+        font-style: normal;
+      }
 
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
 
+      header {
+        background: var(--dark-bg);
+        grid-column: 2 / span 5;
+        font-size: 2.5rem;
+        padding: 2rem;
+        margin-bottom: var(--spacing);
+      }
 
-  header {
-    background: var(--dark-bg);
-    grid-column: 2 / span 5;
-    font-size: 2.5rem;
-    padding: 2rem;
-    margin-bottom: var(--spacing);
-  }
+      section {
+        grid-column: 1 / 8;
+        background: var(--dark-bg);
+        font-size: 1.25rem;
+        line-height: 1.5;
+        margin-bottom: var(--spacing);
+      }
 
-  section {
-    grid-column: 2 / 8;
-    padding: 1rem;
-    background: var(--dark-bg);
-    font-size: 1.25rem;
-    line-height: 1.5;
-    margin-bottom: var(--spacing);
-  }
+      blockquote {
+        margin: 0;
+        padding: 0;
+        grid-column: 2 / span 9;
+        margin-bottom: var(--spacing);
+      }
 
-  blockquote {
-    margin: 0;
-    padding: 0;
-    grid-column: 2 / span 9;
-    margin-bottom: var(--spacing);
-  }
+      blockquote p {
+        color: black;
+        background-color: white;
+        font-size: 4rem;
+        display: inline;
+        line-height: 1;
+      }
 
-  blockquote p {
-    color: black;
-    background-color: white;
-    font-size: 4rem;
-    display: inline;
-    line-height: 1;
-  }
+      .left {
+        grid-column: 6 / 12;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
 
-  .left {
-    grid-column: 6 / 12;
-  }
+      ul li {
+        border: 1px solid #ddd;
+        margin-top: -1px;
+        background-color: #f6f6f6;
+        padding: 5px;
+        color: black;
+      }
+      .mobile-title {
+        font-size: 18px;
+        text-align: center;
+      }
+      .mobile-sub-title {
+        font-size: 14px;
+        text-align: center;
+      }
+      /* The laptop with borders */
+      .laptop {
+        width: 600px;
+        height: 400px;
+        margin: 56px 0 0 0;
+        border: 12px black solid;
+        border-radius: 2px;
+        grid-column: 6/8;
+      }
+
+      /* The keyboard of the laptop */
+      .laptop:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 660px;
+        height: 12px;
+        margin: 15px 0 0 -30px;
+        background: black;
+        border-radius: 2px;
+      }
+
+      /* The top of the keyboard */
+      .laptop:before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 75px;
+        height: 9px;
+        margin: 400px 0 0 257px;
+        background: white;
+        z-index: 1;
+      }
+      .laptop .content {
+        width: 580px;
+        height: 370px;
+        margin: 0px 0 0 0;
+        padding: 10px;
+        background: #817a7a;
+        overflow: hidden;
+      }
+      .laptop-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
+      .laptop-text-style {
+        font-size: 14px;
+        margin: 0;
+        padding: 2px;
+      }
+      .laptop-grid-content {
+        background: #fbf9f9;
+        padding: 10px;
+        margin: 6px;
+        color: #171414;
+      }
+      img {
+        width: 28px;
+        height: 16px;
+      }
+      .text-span {
+        top: -2px;
+        position: relative;
+      }
+      .about {
+        padding: 10px;
+      }
+      .contact {
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+      }
+      a {
+        text-decoration: none;
+      }
     </style>
   </head>
 
   <body>
-
-    <!-- <canvas id="bg"></canvas> 
-    -->
-
-    <main style="width: 100vw; color: white; z-index: 99; position: absolute; width: 100%; margin: 0px auto; padding: 120px 0px;display: grid;
-    grid-template-columns: repeat(12, 1fr);">
-
+    <main>
       <header>
-        <h1>CJ</h1>
-        <p>🚀 Welcome to my website!</p>
+        <h5>Hey There</h5>
+        <h1><small>I'm,</small> Jagan</h1>
+        <p>👋 Welcome to my website!</p>
       </header>
 
-
       <blockquote>
-        <p>I like making stuff and putting it on the internet</p>
+        <p>I am a full-stack web developer and Hybrid Mobile app specialist.</p>
       </blockquote>
 
       <section>
-        <h2>📜 Manifesto</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <h2>📜 About Me</h2>
+        <p class="about">
+          Living in Bengaluru, India. I have been working with Wipro since 2011.
+          Have worked with leading companies around the globe to fulfill their
+          Digital Journey.
         </p>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
+        <div>
+          <a href="https://twitter.com/ijagancj" target="_blank">
+            <img src="./icons/twitter.svg" class="contact" />
+          </a>
+          <a href="https://www.linkedin.com/in/jaganc/" target="_blank">
+            <img src="./icons/linkedin.svg" class="contact" />
+          </a>
+          <a href="https://github.com/jagancj/" target="_blank">
+            <img src="./icons/github.svg" class="contact" />
+          </a>
+          <a href="mailto:jagancj@outlook.com" target="_blank">
+            <img src="./icons/outlook.svg" class="contact" />
+          </a>
+        </div>
       </section>
 
-      <section class="light">
-        <h2>👩🏽‍🚀 Projects</h2>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
-        <h2>🏆 Accomplishments</h2>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
+      <section class="smartphone">
+        <p class="mobile-title">📱 Mobile App Developer</p>
+        <p class="mobile-sub-title">🧑‍💻 Frameworks I work with</p>
+        <ul>
+          <li><img src="./icons/icons8-react-native.svg" />React Native</li>
+          <li><img src="./icons/icons8-flutter.svg" />Flutter</li>
+          <li><img src="./icons/ionic1.svg" />Ionic</li>
+        </ul>
+        <p class="mobile-sub-title">🛠️ Tools I use</p>
+        <ul>
+          <li>
+            <img src="./icons/icons8-visual-studio-code-2019.svg" />VS Code
+          </li>
+          <li><img src="./icons/icons8-android-studio.svg" />Android Studio</li>
+          <li><img src="./icons/icons8-xcode.svg" />XCode</li>
+        </ul>
       </section>
 
-      <blockquote>
-        <p>The best way out is always through <br>-Robert Frost</p>
-      </blockquote>
+      <section class="laptop">
+        <div class="content">
+          <h2>🧑‍💻 Full Stack Developer</h2>
+          <div class="laptop-grid">
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Languages</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/html5.svg" />
+                <span class="text-span">HTML5</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/js.svg" />
+                <span class="text-span">JavaScript</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/css3.svg" />
+                <span class="text-span">CSS3</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-dart.svg" />
+                <span class="text-span">Dart</span>
+              </p>
+            </div>
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Frontend</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/react.svg" />
+                <span class="text-span">React JS</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/angular.svg" />
+                <span class="text-span">Angular JS</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-vue-js.svg" />
+                <span class="text-span">Vue JS</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-typescript.svg" />
+                <span class="text-span">TypeScript</span>
+              </p>
+            </div>
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Backend</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/code.svg" />
+                <span class="text-span">NodeJS</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-mongodb.svg" />
+                <span class="text-span">MongoDB</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/graphql.svg" />
+                <span class="text-span">GraphQL</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/expressjs.svg" />
+                <span class="text-span">ExpressJS</span>
+              </p>
+            </div>
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Style</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/bootstrap.svg" />
+                <span class="text-span">Bootstrap</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-material-ui.svg" />
+                <span class="text-span">Material UI</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/tailwind-css.svg" />
+                <span class="text-span">Tailwind</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-sass.svg" />
+                <span class="text-span">SASS</span>
+              </p>
+            </div>
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Tools</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-visual-studio-code-2019.svg" />
+                <span class="text-span">VS Code</span>
+              </p>
+              <p class="laptop-text-style">
+                <img
+                  src="./icons/intellij.svg"
+                  style="width: 19px; padding: 0px 5px"
+                />
+                <span class="text-span">Intellij IDEA</span>
+              </p>
+            </div>
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Cloud</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-amazon-web-services.svg" />
 
-      <section class="left">
-        <h2>🌮 Work History</h2>
+                <span class="text-span">AWS</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-firebase.svg" />
 
-        <h3>McDonalds</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <h3>Burger King</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <h3>Taco Bell</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+                <span class="text-span">Firebase</span>
+              </p>
+            </div>
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Design</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/figma.svg" />
+                <span class="text-span">Figma</span>
+              </p>
+              <p class="laptop-text-style">
+                <img
+                  src="./icons/balsamiq.png"
+                  style="width: 18px; padding: 0px 5px"
+                />
+                <span class="text-span">Balsamiq</span>
+              </p>
+            </div>
+            <div class="laptop-grid-content">
+              <h6 class="laptop-text-style">Utils</h6>
+              <p class="laptop-text-style">
+                <img src="./icons/Threejs-logo.svg" />
 
+                <span class="text-span">Three JS</span>
+              </p>
+              <p class="laptop-text-style">
+                <img src="./icons/icons8-redux.svg" />
+                <span class="text-span">Redux</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <blockquote>
+      <blockquote style="margin-top: 100px">
         <p>Thanks for watching!</p>
       </blockquote>
-
-
     </main>
-    
-    <script type="module" src="/main.js"></script>
+
     <script type="module" src="/animate.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </body>
 </html>
